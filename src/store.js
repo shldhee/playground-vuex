@@ -14,10 +14,15 @@ export default new Vuex.Store({
       'education',
       'food',
       'community'
-    ]
+    ],
+    count: 0
   },
 
-  mutations: {},
+  mutations: {
+    INCREMENT_COUNT(state, value) {
+      state.count += value
+    }
+  },
   actions: {},
   getters: {
     catLength: state => {
