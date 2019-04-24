@@ -13,11 +13,8 @@ const requireComponent = require.context(
   /Base[A-Z]\w+\.(vue|js)$/
 )
 
-console.log(requireComponent.keys())
-
 requireComponent.keys().forEach(fileName => {
   const componentConfig = requireComponent(fileName)
-  console.log(componentConfig)
 
   const componentName = upperFirst(
     camelCase(fileName.replace(/^\.\/(.*)\.\w+$/, '$1'))
