@@ -69,7 +69,11 @@ export default {
       this.$store
         .dispatch('createEvent', this.event)
         .then(() => {
-          this.event = this.event = this.createFreshEventObject()
+          this.$router.push({
+            name: 'event-show',
+            params: { id: this.event.id }
+          })
+          this.event = this.createFreshEventObject()
         })
         .catch(() => {
           console.log('There was a problem creating your event.')
