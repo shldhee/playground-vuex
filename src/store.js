@@ -16,29 +16,32 @@ export default new Vuex.Store({
       'food',
       'community'
     ],
-    count: 0
+    events: []
   },
 
   mutations: {
     ADD_EVENT(state, event) {
       state.events.push(event)
+    },
+    SET_EVENT(state, events) {
+      state.events = events
     }
-    // INCREMENT_COUNT(state, value) {
-    //   state.count += value
-    // }
   },
   actions: {
     createEvent({ commit }, event) {
       return EventService.postEvent(event).then(() => {
         commit('ADD_EVENT', event)
       })
+    },
+    fetchEvents({ commit }, { perPage, page }) {
+      return EventService.getEvents(perPage, page)
+        .then(response => {
+          commit('SET_EVENT', response.data)
+        })
+        .catch(error => {
+          console.log('There was an error : ', error.response)
+        })
     }
-    // updateCount(context, incrementBy) {
-    //   console.log(context)
-    //   if (context.state.user) {
-    //     context.commit('INCREMENT_COUNT', incrementBy)
-    //   }
-    // }
   },
   getters: {
     catLength: state => {
