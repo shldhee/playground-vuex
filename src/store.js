@@ -41,14 +41,20 @@ export default new Vuex.Store({
         commit('ADD_EVENT', event)
       })
     },
-    fetchEvent({ commit }, id) {
-      return EventService.getEvent(id)
-        .then(response => {
-          commit('SET_EVENT', response.data)
-        })
-        .catch(error => {
-          console.log('There was an error:', error.response)
-        })
+    fetchEvent({ commit, getters }, id) {
+      var event = getters.getEventById(id)
+
+      if (event) {
+        commit('SET_EVENT', event)
+      } else {
+        EventService.getEvent(id)
+          .then(response => {
+            event = response.data
+          })
+          .catch(error => {
+            console.log('There was an error: ', error.response)
+          })
+      }
     },
     fetchEvents({ commit }, { perPage, page }) {
       return EventService.getEvents(perPage, page)
@@ -67,6 +73,9 @@ export default new Vuex.Store({
   getters: {
     catLength: state => {
       return state.categories.length
+    },
+    getEventById: state => id => {
+      return state.events.find(event => event.id === id)
     }
   }
 })
