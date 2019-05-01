@@ -43,22 +43,23 @@ export const actions = {
         })
     }
   },
-  fetchEvents({ commit }, { perPage, page }) {
-    return EventService.getEvents(perPage, page)
+  fetchEvents({ commit, dispatch }, { perPage, page }) {
+    EventService.getEvents(perPage, page)
       .then(response => {
         commit('SET_EVENTS_TOTAL', parseInt(response.headers['x-total-count']))
         commit('SET_EVENTS', response.data)
       })
       .catch(error => {
-        console.log('There was an error : ', error.response)
+        const notification = {
+          type: 'error',
+          message: 'There was a problem fetching events: ' + error.message
+        }
+        dispatch('notifications/add', notification, { root: true })
       })
   }
 }
 
 export const getters = {
-  catLength: state => {
-    return state.categories.length
-  },
   getEventById: state => id => {
     return state.events.find(event => event.id === id)
   }
